@@ -21,13 +21,16 @@ io.on("connection", (socket)=>{
     count++;
     io.emit("counter", count);
     socket.broadcast.emit('message', 'A new user joined now...')
-    console.log("connection successful, total = "+ count);
+    // console.log("connection successful, total = "+ count);
 
-    socket.on("message", (data)=>{
+    socket.on("message", (data,callback)=>{
         // console.log(data);
         io.emit("sendMessage", data);
+        // callback("message delivered...")
     })
-    
+    socket.on("coordinates",(link)=>{
+        io.emit("link", link);
+    })
     socket.on("disconnect", (socket)=>{
         count = count-1;
         io.emit("left", count);

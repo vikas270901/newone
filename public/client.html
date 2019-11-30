@@ -1,16 +1,19 @@
 <!DOCTYPE html>
     <head>
     <title>Client Chat</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mustache.js/3.0.0/mustache.min.js" ></script>
     <script src="http://code.jquery.com/jquery-latest.min.js" ></script>
     <script src="/socket.io/socket.io.js"></script>
-    <script src="/tools/clientScript.js"></script> 
+    <script type="text/javascript" src="/tools/clientScript.js"></script> 
     </head>
 <body>
-    <form id="message">
-        <input type='text' name="Message" />
-        <button>Send Message</button>
-    </form>
     <button id="locate" >Share Location</button>
-<h1>Hello World</h1>
+    <span id="thedata" ></span>
+    <form id="message">
+        <input id="input" type='text' />
+        <button id="send" >Send Message</button>
+    </form>
+    <span id="showMessage"></span>
+<script id="allmsg" >{{message}}</script>
 </body>
 </html>

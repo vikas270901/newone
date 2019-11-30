@@ -1,32 +1,48 @@
 const socket = io();
 socket.on("counter", (count)=>{
-    console.log(count);
-    console.log("counting...")
+    console.log("Total: "+count);
+    // console.log("counting...")
 })
 socket.on("left", (count)=>{
-    console.log("A person left, Total = "+count)
+    console.log("1 left")
 })
 
-socket.on("message", (data)=>{
-    console.log(data);
+var mssg = $("#allmsg").innerHTML;
+socket.on("message", (message)=>{
+    // console.log(mssg);
+    // var dat = Mustache.render(mssg, {message: message})
+    // // console.log(data+"hs");
+    // dat.insertAdjacentHTML('beforeend', dat);
 })
-jQuery(function clicked(){
+jQuery(
+function clicked(){
+    let link="";
     $('#locate').on('click', ()=>{
-        console.log(navigator.geolocation.getCurrentPosition((data)=>{
-            console.log(`https://google.com/maps?q=${data.coords.latitude},${data.coords.longitude}`);
-        }));
+        navigator.geolocation.getCurrentPosition((data)=>{
+            link = `https://google.com/maps?q=${data.coords.latitude},${data.coords.longitude}`;
+            socket.emit("coordinates", link);
+        }); 
+
     })
-    $("#message").on('submit', (data)=>{
+    socket.on("link", (link)=>{
+        $("#thedata").html(`<a href="${link}" target="_blank" >Go to location</a>`); 
+    })
+    $("#message").on('submit', (data, callback)=>{
         data.preventDefault();
-        var mesg = document.querySelector('input').value; 
-        // console.log(mesg);
-        socket.emit("message", mesg);
-    })
+        var msg = $("#input").val();
+        socket.emit("message", msg);
+        // console.log("callback");
+        $("#input").val("");
+        $("#input").focus();
 
-    socket.on("sendMessage", (data)=>{
-        console.log(`Data came from socket , data is : ${data}`)
     })
-
+})
+var old = "";
+    socket.on("sendMessage", (data, e)=>{
+        // data.preventDefault();
+        old = old +"<br/>"+ data;
+        $("#showMessage").html(old);
+        console.log(`Message: ${data}`)
     })
 
 // var docs = document.querySelector('#locate');
